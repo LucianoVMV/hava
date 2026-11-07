@@ -8,3 +8,6 @@ desktop.ini
 
 # Respaldos exportados de la app: contienen tus datos personales, nunca al repo
 *-respaldo*.json
+
+# Instrucciones del proyecto para Claude Code (solo en mi PC, no se publican)
+CLAUDE.md
