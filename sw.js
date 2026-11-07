@@ -11,7 +11,7 @@
 //
 // Al agregar un archivo nuevo a la app, súmalo a ARCHIVOS y sube la VERSION.
 
-const VERSION = "v3";
+const VERSION = "v4";
 const CACHE = `mini-apps-${VERSION}`;
 
 // Archivos que se guardan apenas se instala la app (el "esqueleto")

@@ -98,6 +98,20 @@
   font-size: 18px;
 }
 
+.btn-peligro {
+  background: var(--alerta);
+}
+
+.pila-botones {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.nota {
+  font-size: 14px;
+}
+
 .btn-secundario {
   background: var(--acento-suave);
   color: var(--acento);

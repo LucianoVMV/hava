@@ -114,17 +114,60 @@ export function exportarDatos() {
   };
 }
 
-/** Restaura un respaldo (reemplaza los datos actuales). Lanza error si no es válido. */
-export function importarDatos(respaldo) {
-  if (!respaldo || respaldo.app !== "mini-apps" || typeof respaldo.datos !== "object") {
+/**
+ * Revisa que un objeto sea un respaldo de esta app. Lanza un error con un
+ * mensaje claro si no lo es. Se usa ANTES de borrar nada.
+ */
+export function validarRespaldo(respaldo) {
+  if (!respaldo || respaldo.app !== "mini-apps" || typeof respaldo.datos !== "object" || respaldo.datos === null) {
     throw new Error("El archivo no es un respaldo válido de Mini Apps.");
   }
-  if (respaldo.versionEsquema > VERSION_ESQUEMA) {
-    throw new Error("Este respaldo es de una versión más nueva de la app.");
+  if (!Number.isInteger(respaldo.versionEsquema) || respaldo.versionEsquema < 1) {
+    throw new Error("El respaldo no indica su versión de datos.");
   }
-  // Aquí irían las migraciones si versionEsquema < VERSION_ESQUEMA
-  for (const c of COLECCIONES) borrar(c);
+  if (respaldo.versionEsquema > VERSION_ESQUEMA) {
+    throw new Error("Este respaldo es de una versión más nueva de la app. Actualiza la app primero.");
+  }
   for (const [c, valor] of Object.entries(respaldo.datos)) {
+    // Cada colección debe ser un objeto, una lista o null (nunca texto suelto o números)
+    if (COLECCIONES.includes(c) && valor !== null && typeof valor !== "object") {
+      throw new Error(`El respaldo tiene datos dañados en "${c}".`);
+    }
+  }
+}
+
+/**
+ * Transforma respaldos de versiones anteriores al formato actual.
+ * Hoy solo existe la versión 1; cuando cambie el formato, aquí irá cada paso
+ * (p. ej. "si versionEsquema === 1, convertir X en Y").
+ */
+function migrar(respaldo) {
+  return respaldo;
+}
+
+/** Restaura un respaldo (reemplaza los datos actuales). Lanza error si no es válido. */
+export function importarDatos(respaldo) {
+  validarRespaldo(respaldo);
+  const actualizado = migrar(respaldo);
+  borrarTodo();
+  for (const [c, valor] of Object.entries(actualizado.datos)) {
     if (COLECCIONES.includes(c)) guardar(c, valor);
+  }
+  // Por si el respaldo no traía "meta", la volvemos a crear
+  if (leer("meta") === null) iniciarAlmacenamiento();
+}
+
+/** Borra TODOS los datos de la app en este dispositivo. */
+export function borrarTodo() {
+  for (const c of COLECCIONES) borrar(c);
+}
+
+/** ¿El navegador prometió no borrar los datos? (true / false / null si no se sabe) */
+export async function estadoPersistencia() {
+  if (!navigator.storage?.persisted) return null;
+  try {
+    return await navigator.storage.persisted();
+  } catch {
+    return null;
   }
 }
