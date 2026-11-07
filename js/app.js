@@ -9,6 +9,7 @@
 // en cualquier servidor estático (incluido GitHub Pages).
 
 import { iniciarAlmacenamiento } from "./storage.js";
+import { hoyISO } from "./utils/fechas.js";
 import * as hoy from "./modules/productividad/hoy.js";
 import * as habitos from "./modules/productividad/habitos.js";
 import * as enfoque from "./modules/productividad/enfoque.js";
@@ -75,7 +76,20 @@ function registrarServiceWorker() {
   });
 }
 
+/**
+ * Si dejas la app abierta y vuelves otro día (p. ej. la abriste de noche y
+ * regresas en la mañana), redibujamos para que "hoy" sea el día correcto.
+ * Solo si cambió la fecha, para no borrar lo que estabas escribiendo.
+ */
+let fechaMostrada = hoyISO();
+function refrescarSiCambioElDia() {
+  if (document.visibilityState !== "visible" || hoyISO() === fechaMostrada) return;
+  fechaMostrada = hoyISO();
+  navegar();
+}
+
 iniciarAlmacenamiento();
 window.addEventListener("hashchange", navegar);
+document.addEventListener("visibilitychange", refrescarSiCambioElDia);
 navegar();
 registrarServiceWorker();

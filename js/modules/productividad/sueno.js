@@ -29,6 +29,7 @@ import {
   leerSuenoEnCurso,
   iniciarSueno,
   cancelarSueno,
+  terminarSueno,
   duracionMinutos,
   cumpleHoraMeta,
   resumenSemana,
@@ -282,8 +283,7 @@ function accionDesperte() {
   // Protección contra toques accidentales
   if (minutos < 30 && !confirm(`Solo pasaron ${formatoDuracion(minutos)}. ¿Guardar igual?`)) return;
   if (leerRegistros()[hoy] && !confirm("Ya hay un registro para hoy. ¿Reemplazarlo?")) return;
-  guardarRegistro(hoy, enCurso.horaDormir, despertar);
-  cancelarSueno();
+  terminarSueno(hoy, despertar);
   fechaSeleccionada = hoy;
   mostrarAviso(`Buenos días ☀️ Dormiste ${formatoDuracion(minutos)}`);
 }

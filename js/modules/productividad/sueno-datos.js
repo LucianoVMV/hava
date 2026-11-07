@@ -54,6 +54,18 @@ export function cancelarSueno() {
   return guardar("suenoEnCurso", null);
 }
 
+/**
+ * "Ya desperté": guarda la noche en curso con la hora de despertar y la cierra.
+ * Devuelve los minutos dormidos (o null si no había una noche en curso).
+ */
+export function terminarSueno(fecha, horaDespertar) {
+  const enCurso = leerSuenoEnCurso();
+  if (!enCurso) return null;
+  guardarRegistro(fecha, enCurso.horaDormir, horaDespertar);
+  cancelarSueno();
+  return duracionMinutos(enCurso.horaDormir, horaDespertar);
+}
+
 // ---------- Cálculos ----------
 
 /**

@@ -732,3 +732,112 @@
 .peligro-texto {
   color: var(--alerta);
 }
+
+/* =========================================================
+   Hoy
+   ========================================================= */
+
+.saludo {
+  margin: 0 4px 14px;
+}
+
+.saludo-texto {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.mensaje-exito {
+  margin: 10px 0 4px;
+  color: var(--exito);
+  font-weight: 600;
+}
+
+/* Enlace al pie de una tarjeta ("Ver todos ›") */
+.enlace-tarjeta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 4px;
+  color: var(--acento);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Tarjeta completa que es un enlace */
+.tarjeta-enlace {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.tarjeta a {
+  color: var(--acento);
+}
+
+/* Vasos de agua: cada uno es un botón con forma de vaso */
+.vasos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 12px 0 6px;
+}
+
+.vaso {
+  width: 30px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid color-mix(in srgb, var(--acento) 55%, var(--borde));
+  border-top-width: 1px;
+  border-radius: 3px 3px 9px 9px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+  /* Un poco más angosto abajo, como un vaso */
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+}
+
+.vaso.lleno {
+  background: linear-gradient(to top, var(--acento) 80%, transparent 80%);
+}
+
+.vasos-extra {
+  align-self: center;
+  font-weight: 700;
+  color: var(--acento);
+}
+
+.btn-menos {
+  flex: 0 0 72px !important;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Desplegable "Semana y metas" */
+.detalle-desplegable {
+  margin-top: 10px;
+  border-top: 1px solid var(--borde);
+  padding-top: 6px;
+}
+
+.detalle-desplegable summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--acento);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.detalle-desplegable .fila-2 {
+  margin-top: 10px;
+}
