@@ -23,6 +23,7 @@ export const COLECCIONES = [
   "socialUsage",
   "sleep",
   "suenoEnCurso",
+  "salida",
   "settings",
   "meta",
 ];
@@ -49,6 +50,12 @@ export function guardar(coleccion, valor) {
     alert("No se pudieron guardar los datos. Revisa el espacio del dispositivo.");
     return false;
   }
+}
+
+/** Crea un identificador único para un registro nuevo (hábito, ítem de lista…). */
+export function nuevoId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
 /** Borra una colección. */

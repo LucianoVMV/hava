@@ -355,3 +355,380 @@
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+/* =========================================================
+   Hábitos
+   ========================================================= */
+
+.encabezado-progreso {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.encabezado-progreso h2 {
+  margin: 0;
+}
+
+.contador {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--acento);
+  font-variant-numeric: tabular-nums;
+}
+
+.barra-progreso {
+  height: 8px;
+  margin: 10px 0 4px;
+  border-radius: 999px;
+  background: var(--fondo);
+  overflow: hidden;
+}
+
+.barra-progreso > div {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--exito);
+  transition: width 0.3s;
+}
+
+.subtitulo {
+  margin: 16px 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Lista de ítems marcables (hábitos y "Antes de salir") */
+.lista-checks {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.fila-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+}
+
+.lista-checks .fila-check + .fila-check {
+  border-top: 1px solid var(--borde);
+}
+
+.check-principal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.circulo {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--borde);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.fila-check.hecho .circulo {
+  background: var(--exito);
+  border-color: var(--exito);
+}
+
+.fila-check.hecho .nombre {
+  color: var(--texto-suave);
+  text-decoration: line-through;
+}
+
+.check-principal .emoji {
+  flex: none;
+  font-size: 22px;
+}
+
+.textos {
+  display: grid;
+  min-width: 0;
+}
+
+.textos .nombre {
+  overflow-wrap: anywhere;
+}
+
+.textos .detalle {
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+.racha {
+  flex: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.btn-icono {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--texto-suave);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.btn-icono.peligro {
+  font-size: 18px;
+  color: var(--alerta);
+}
+
+.texto-item {
+  flex: 1;
+  padding: 0 4px;
+}
+
+.btn-texto.compacto {
+  margin: 0;
+  color: var(--acento);
+  font-weight: 600;
+}
+
+.fila-agregar {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fila-agregar input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 17px;
+}
+
+/* Archivados (desplegable) */
+.archivados {
+  margin-top: 12px;
+}
+
+.archivados summary {
+  min-height: 32px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lista-simple {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.fila-archivada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+}
+
+.fila-archivada .btn-texto {
+  margin: 0;
+  color: var(--acento);
+}
+
+/* Detalle */
+.btn-texto.volver {
+  margin: 0 0 8px -8px;
+  padding: 0 8px;
+  color: var(--acento);
+  font-size: 17px;
+}
+
+.titulo-habito {
+  font-size: 22px !important;
+}
+
+/* Mapa de calor: 7 filas (lun → dom), una columna por semana */
+.mapa-calor {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-template-columns: 14px;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 3px;
+  margin: 10px 0;
+}
+
+.mc-etiqueta {
+  grid-column: 1;
+  font-size: 10px;
+  line-height: 1;
+  align-self: center;
+  color: var(--texto-suave);
+}
+
+.mc-celda {
+  aspect-ratio: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: var(--fondo);
+  cursor: pointer;
+}
+
+.mc-celda.hecho {
+  background: var(--exito);
+}
+
+.mc-celda.fallado {
+  background: color-mix(in srgb, var(--alerta) 35%, var(--fondo));
+}
+
+.mc-celda.pendiente-hoy {
+  outline: 2px solid var(--acento);
+  outline-offset: -2px;
+}
+
+.mc-celda.libre {
+  background: transparent;
+  outline: 1px dashed var(--borde);
+  outline-offset: -1px;
+}
+
+.mc-celda.antes {
+  opacity: 0.4;
+}
+
+.mc-celda.futuro {
+  visibility: hidden;
+}
+
+.leyenda-mapa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+.leyenda-mapa .mc-celda {
+  display: inline-block;
+  width: 12px;
+  cursor: default;
+}
+
+/* Formulario de hábito */
+.fila-emoji {
+  display: grid;
+  gap: 8px;
+}
+
+.campo input.input-emoji {
+  width: 72px;
+  font-size: 26px;
+  text-align: center;
+}
+
+.emojis-rapidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.emoji-rapido {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: var(--fondo);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Chips: radios/checkbox con aspecto de botón */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.chip input:checked + span {
+  border-color: var(--acento);
+  background: var(--acento-suave);
+  color: var(--acento);
+  font-weight: 600;
+}
+
+.chip input:focus-visible + span {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.chips.dias .chip span {
+  min-width: 48px;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+/* Mostrar "qué días" o "cada cuántos días" solo según la frecuencia elegida */
+.form-habito:not(:has(input[name="tipo"][value="dias"]:checked)) .solo-dias,
+.form-habito:not(:has(input[name="tipo"][value="intervalo"]:checked)) .solo-intervalo {
+  display: none;
+}
+
+.peligro-texto {
+  color: var(--alerta);
+}

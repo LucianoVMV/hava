@@ -49,6 +49,16 @@ export function sumarDias(fechaISO, dias) {
   return f.toISOString().slice(0, 10);
 }
 
+/** Día de la semana: 0 = domingo, 1 = lunes … 6 = sábado */
+export function diaSemana(fechaISO) {
+  return aFechaUTC(fechaISO).getUTCDay();
+}
+
+/** Días que hay de `desde` a `hasta`: diasEntre("2026-11-05", "2026-11-07") → 2 */
+export function diasEntre(desde, hasta) {
+  return Math.round((aFechaUTC(hasta) - aFechaUTC(desde)) / 86400000);
+}
+
 /** Lista de los últimos `n` días terminando en `hasta` (incluido), del más antiguo al más nuevo. */
 export function ultimosDias(n, hasta = hoyISO()) {
   return Array.from({ length: n }, (_, i) => sumarDias(hasta, i - (n - 1)));

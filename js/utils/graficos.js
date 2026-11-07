@@ -7,6 +7,37 @@
 // Los colores usan las variables CSS, así respetan el modo claro/oscuro.
 
 import { escaparHTML } from "./dom.js";
+import { sumarDias, diaSemana, fechaCorta } from "./fechas.js";
+
+/**
+ * Mapa de calor tipo calendario (como el de GitHub): una columna por semana,
+ * una fila por día (lunes arriba). Cada cuadrito es un botón con data-fecha,
+ * así la pantalla puede reaccionar al tocarlo.
+ * @param {object} op
+ * @param {string} op.hoy                     fecha "AAAA-MM-DD"
+ * @param {number} [op.semanas=12]
+ * @param {(fecha:string)=>string} op.estado  devuelve una clase CSS para cada día
+ */
+export function mapaCalor({ hoy, semanas = 12, estado }) {
+  // Último cuadro = domingo de esta semana; primero = lunes de hace (semanas-1) semanas
+  const hastaDomingo = (7 - diaSemana(hoy)) % 7;
+  const ultimo = sumarDias(hoy, hastaDomingo);
+  const primero = sumarDias(ultimo, -(semanas * 7 - 1));
+
+  const etiquetas = ["L", "M", "X", "J", "V", "S", "D"]
+    .map((d, i) => `<span class="mc-etiqueta" style="grid-row:${i + 1}">${i % 2 === 0 ? d : ""}</span>`)
+    .join("");
+
+  let celdas = "";
+  for (let i = 0; i < semanas * 7; i++) {
+    const fecha = sumarDias(primero, i);
+    const clase = estado(fecha);
+    const deshabilitado = clase === "futuro" ? " disabled" : "";
+    celdas += `<button type="button" class="mc-celda ${clase}" data-fecha="${fecha}"
+      aria-label="${escaparHTML(fechaCorta(fecha))}: ${clase}"${deshabilitado}></button>`;
+  }
+  return `<div class="mapa-calor">${etiquetas}${celdas}</div>`;
+}
 
 /**
  * Gráfico de barras verticales.
