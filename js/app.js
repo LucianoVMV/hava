@@ -8,6 +8,7 @@
 // y nosotros dibujamos la pantalla que corresponde. Es simple y funciona
 // en cualquier servidor estático (incluido GitHub Pages).
 
+import { iniciarAlmacenamiento } from "./storage.js";
 import * as hoy from "./modules/productividad/hoy.js";
 import * as habitos from "./modules/productividad/habitos.js";
 import * as enfoque from "./modules/productividad/enfoque.js";
@@ -74,6 +75,7 @@ function registrarServiceWorker() {
   });
 }
 
+iniciarAlmacenamiento();
 window.addEventListener("hashchange", navegar);
 navegar();
 registrarServiceWorker();

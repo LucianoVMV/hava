@@ -91,3 +91,208 @@
 .btn:active {
   opacity: 0.8;
 }
+
+.btn-bloque {
+  width: 100%;
+  min-height: 54px;
+  font-size: 18px;
+}
+
+.btn-secundario {
+  background: var(--acento-suave);
+  color: var(--acento);
+}
+
+/* Botón que parece enlace (acciones secundarias como "Cancelar") */
+.btn-texto {
+  display: block;
+  margin: 8px auto 0;
+  min-height: 44px;
+  padding: 0 16px;
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  font: inherit;
+  cursor: pointer;
+}
+
+.texto-centro {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.tarjeta-destacada {
+  border: 2px solid var(--acento);
+  text-align: center;
+}
+
+.tarjeta-destacada .btn {
+  margin-top: 12px;
+}
+
+/* ---------- Formularios ---------- */
+.formulario {
+  display: grid;
+  gap: 12px;
+}
+
+.campo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.campo > span {
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+
+.campo input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 17px; /* 16px o más: evita que iOS haga zoom al tocar el campo */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.campo input:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.fila-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.acciones .btn {
+  flex: 1;
+}
+
+.duracion {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+  min-height: 1.45em;
+}
+
+/* ---------- Estadísticas ---------- */
+.estadisticas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.estadistica {
+  display: grid;
+  justify-items: center;
+  padding: 10px 4px;
+  border-radius: 12px;
+  background: var(--fondo);
+  text-align: center;
+}
+
+.estadistica .valor {
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estadistica .nombre {
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+.grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.leyenda {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 8px;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+.linea-meta {
+  display: inline-block;
+  width: 18px;
+  border-top: 2px dashed var(--exito);
+}
+
+/* ---------- Historial ---------- */
+.lista-historial {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+
+.lista-historial li + li {
+  border-top: 1px solid var(--borde);
+}
+
+.fila-historial {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fila-historial .horas {
+  color: var(--texto-suave);
+}
+
+.fila-historial .total {
+  font-weight: 600;
+  min-width: 82px;
+  text-align: right;
+}
+
+/* ---------- Aviso flotante ("Guardado ✓") ---------- */
+.aviso {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--alto-pestanas) + var(--seguro-abajo) + 16px);
+  z-index: 20;
+  transform: translate(-50%, 20px);
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--texto);
+  color: var(--fondo);
+  font-size: 15px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.aviso.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

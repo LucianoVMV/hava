@@ -11,7 +11,7 @@
 //
 // Al agregar un archivo nuevo a la app, súmalo a ARCHIVOS y sube la VERSION.
 
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `mini-apps-${VERSION}`;
 
 // Archivos que se guardan apenas se instala la app (el "esqueleto")
@@ -22,7 +22,11 @@ const ARCHIVOS = [
   "./css/base.css",
   "./css/components.css",
   "./js/app.js",
+  "./js/storage.js",
   "./js/utils/dom.js",
+  "./js/utils/fechas.js",
+  "./js/utils/graficos.js",
+  "./js/modules/productividad/sueno-datos.js",
   "./js/modules/productividad/hoy.js",
   "./js/modules/productividad/habitos.js",
   "./js/modules/productividad/enfoque.js",
