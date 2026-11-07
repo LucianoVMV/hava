@@ -29,7 +29,9 @@ export function sonarAviso() {
     const inicio = contextoAudio.currentTime;
     [0, 0.35, 0.7].forEach((retraso) => pitido(inicio + retraso));
   }
-  navigator.vibrate?.([200, 100, 200]); // funciona en Android/PC con vibración; en iPhone no hace nada
+  // Vibrar: funciona en Android; en iPhone no existe. Solo si ya tocaste la pantalla
+  // (si no, el navegador lo bloquea y muestra un error).
+  if (navigator.userActivation?.hasBeenActive ?? true) navigator.vibrate?.([200, 100, 200]);
 }
 
 function pitido(cuando) {
