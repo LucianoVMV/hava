@@ -161,6 +161,51 @@
   appearance: none;
 }
 
+/* Selector de hora 24 h: dos listas (hora : minutos) */
+.selector-hora {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 48px;
+  padding: 0 6px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+}
+
+.selector-hora select {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  border: none;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  text-align-last: center;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.selector-hora select option {
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+.selector-hora:focus-within {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.duracion .rango {
+  display: block;
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+
 .campo input:focus {
   outline: 2px solid var(--acento);
   outline-offset: 1px;

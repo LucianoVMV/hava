@@ -11,7 +11,7 @@
 //
 // Al agregar un archivo nuevo a la app, súmalo a ARCHIVOS y sube la VERSION.
 
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = `mini-apps-${VERSION}`;
 
 // Archivos que se guardan apenas se instala la app (el "esqueleto")
@@ -71,7 +71,10 @@ self.addEventListener("fetch", (evento) => {
   if (request.method !== "GET" || new URL(request.url).origin !== location.origin) return;
 
   evento.respondWith(
-    fetch(request)
+    // cache: "no-cache" → el navegador pregunta al servidor si el archivo cambió
+    // (si no cambió, la respuesta es mínima). Sin esto podría darte una versión vieja
+    // guardada en su caché HTTP aunque haya internet.
+    fetch(request, { cache: "no-cache" })
       .then((respuesta) => {
         if (respuesta.ok) {
           const copia = respuesta.clone();

@@ -8,7 +8,7 @@
 //  - Funciones *HTML(): cada una arma el HTML de una tarjeta.
 // Los cálculos viven en sueno-datos.js, aquí solo hay pantalla.
 
-import { escaparHTML as esc, mostrarAviso } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, selectorHora, leerHora } from "../../utils/dom.js";
 import {
   hoyISO,
   horaActual,
@@ -16,6 +16,8 @@ import {
   fechaCorta,
   deMinutos,
   formatoDuracion,
+  aMinutos,
+  sumarDias,
 } from "../../utils/fechas.js";
 import { graficoBarras } from "../../utils/graficos.js";
 import {
@@ -106,16 +108,16 @@ function registroHTML(registros, metas) {
           <input type="date" name="fecha" value="${esc(fechaSeleccionada)}" max="${esc(hoyISO())}" required>
         </label>
         <div class="fila-2">
-          <label class="campo">
+          <div class="campo" role="group" aria-label="Hora en que te dormiste">
             <span>🌙 Me dormí</span>
-            <input type="time" name="horaDormir" value="${esc(horaDormir)}" required>
-          </label>
-          <label class="campo">
+            ${selectorHora("horaDormir", horaDormir, { inicio: 18 })}
+          </div>
+          <div class="campo" role="group" aria-label="Hora en que despertaste">
             <span>☀️ Desperté</span>
-            <input type="time" name="horaDespertar" value="${esc(horaDespertar)}" required>
-          </label>
+            ${selectorHora("horaDespertar", horaDespertar)}
+          </div>
         </div>
-        <p class="duracion" id="duracion-vista">${textoDuracion(horaDormir, horaDespertar)}</p>
+        <p class="duracion" id="duracion-vista">${textoDuracion(fechaSeleccionada, horaDormir, horaDespertar)}</p>
         <div class="acciones">
           <button class="btn" type="submit">${existente ? "Actualizar" : "Guardar"}</button>
           ${existente ? `<button class="btn btn-secundario" type="button" data-accion="borrar">Borrar</button>` : ""}
@@ -175,16 +177,16 @@ function metasHTML(metas) {
   return `
     <section class="tarjeta">
       <h2>Metas</h2>
-      <div class="fila-2">
-        <label class="campo">
+      <form id="form-metas" class="fila-2">
+        <div class="campo" role="group" aria-label="Hora meta para dormir">
           <span>Dormir antes de</span>
-          <input type="time" name="horaMeta" value="${esc(metas.horaMeta)}">
-        </label>
+          ${selectorHora("horaMeta", metas.horaMeta, { inicio: 18, paso: 15 })}
+        </div>
         <label class="campo">
           <span>Horas de sueño</span>
           <input type="number" name="horasMeta" value="${esc(metas.horasMeta)}" min="4" max="12" step="0.5" inputmode="decimal">
         </label>
-      </div>
+      </form>
     </section>`;
 }
 
@@ -221,12 +223,23 @@ function historialHTML(registros, metas) {
 
 // ---------- Textos de ayuda ----------
 
-function textoDuracion(horaDormir, horaDespertar) {
-  if (!HORA_VALIDA.test(horaDormir) || !HORA_VALIDA.test(horaDespertar)) return "";
+/**
+ * Explica qué se va a guardar, con fechas reales.
+ * Si la hora de dormir es "mayor" que la de despertar (23:30 → 07:00), te dormiste
+ * el día anterior; si no (00:30 → 07:00), te dormiste el mismo día en que despertaste.
+ */
+function textoDuracion(fecha, horaDormir, horaDespertar) {
+  if (!fecha || !HORA_VALIDA.test(horaDormir) || !HORA_VALIDA.test(horaDespertar)) return "";
   const minutos = duracionMinutos(horaDormir, horaDespertar);
   if (minutos === 0) return "Las dos horas son iguales: revísalas";
+
+  const cruzaMedianoche = aMinutos(horaDormir) > aMinutos(horaDespertar);
+  const fechaDormir = cruzaMedianoche ? sumarDias(fecha, -1) : fecha;
   const aviso = minutos > 14 * 60 ? " · revisa las horas" : "";
-  return `Dormiste <strong>${formatoDuracion(minutos)}</strong>${aviso}`;
+
+  return `
+    <span class="rango">🌙 ${esc(fechaCorta(fechaDormir))} ${esc(horaDormir)} → ☀️ ${esc(fechaCorta(fecha))} ${esc(horaDespertar)}</span>
+    Dormiste <strong>${formatoDuracion(minutos)}</strong>${aviso}`;
 }
 
 function calificarRegularidad(minutos) {
@@ -293,8 +306,14 @@ function accionEditar(fecha) {
 function alEscribir(e) {
   const form = e.target.closest("#form-sueno");
   if (!form) return;
+  // Si cambió la fecha, alCambiar redibuja todo; aquí solo actualizamos el texto
+  if (e.target.name === "fecha") return;
   const vista = form.querySelector("#duracion-vista");
-  vista.innerHTML = textoDuracion(form.horaDormir.value, form.horaDespertar.value);
+  vista.innerHTML = textoDuracion(
+    form.fecha.value,
+    leerHora(form, "horaDormir"),
+    leerHora(form, "horaDespertar")
+  );
 }
 
 function alCambiar(e, raiz) {
@@ -303,8 +322,8 @@ function alCambiar(e, raiz) {
     // Al cambiar la fecha, cargamos ese día (o valores por defecto)
     fechaSeleccionada = value;
     dibujar(raiz);
-  } else if (name === "horaMeta" && HORA_VALIDA.test(value)) {
-    guardarMetas({ horaMeta: value });
+  } else if (name.startsWith("horaMeta-")) {
+    guardarMetas({ horaMeta: leerHora(e.target.form, "horaMeta") });
     dibujar(raiz);
   } else if (name === "horasMeta") {
     const horas = Number(value);
@@ -318,9 +337,10 @@ function alCambiar(e, raiz) {
 function alGuardar(e, raiz) {
   e.preventDefault();
   const form = e.target;
+  if (form.id !== "form-sueno") return; // el form de metas se guarda solo, sin botón
   const fecha = form.fecha.value;
-  const horaDormir = form.horaDormir.value;
-  const horaDespertar = form.horaDespertar.value;
+  const horaDormir = leerHora(form, "horaDormir");
+  const horaDespertar = leerHora(form, "horaDespertar");
 
   if (!fecha || !HORA_VALIDA.test(horaDormir) || !HORA_VALIDA.test(horaDespertar)) {
     mostrarAviso("Completa la fecha y las dos horas");
