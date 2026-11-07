@@ -21,6 +21,7 @@ import {
   leerSalida,
 } from "./habitos-datos.js";
 import * as agua from "./agua-datos.js";
+import * as enfoque from "./enfoque-datos.js";
 import {
   leerRegistros,
   leerMetas as leerMetasSueno,
@@ -49,7 +50,33 @@ function dibujar(raiz) {
   const aguaAbierta = raiz.querySelector("#detalle-agua")?.open ?? false;
   const hoy = hoyISO();
   const hora = horaActual();
-  raiz.innerHTML = saludoHTML(hora) + habitosHTML(hoy, hora) + aguaHTML(hoy, hora, aguaAbierta) + suenoHTML(hoy, hora) + salidaHTML();
+  raiz.innerHTML =
+    saludoHTML(hora) +
+    habitosHTML(hoy, hora) +
+    enfoqueHTML(hoy) +
+    aguaHTML(hoy, hora, aguaAbierta) +
+    suenoHTML(hoy, hora) +
+    salidaHTML();
+}
+
+// ---------- Enfoque (acceso rápido) ----------
+
+function enfoqueHTML(hoy) {
+  const t = enfoque.leerTemporizador();
+  const { metaDiaria } = enfoque.leerConfig();
+  const minutos = enfoque.minutosDelDia(hoy);
+  const fase = enfoque.FASES[t.fase];
+
+  // Texto estático (no hace falta un reloj aquí): cuándo termina o si está en pausa
+  let estado = `${formatoDuracion(minutos)} de ${formatoDuracion(metaDiaria)} hoy`;
+  if (t.estado === "corriendo") estado = `${fase.emoji} ${fase.nombre} · termina ${horaActual(new Date(t.fin))}`;
+  else if (t.estado === "pausado") estado = `${fase.emoji} ${fase.nombre} en pausa`;
+
+  return `
+    <a class="tarjeta tarjeta-enlace ${t.estado !== "listo" ? "tarjeta-activa" : ""}" href="#/enfoque">
+      <span>⏱️ Enfoque</span>
+      <span class="texto-suave">${esc(estado)} ›</span>
+    </a>`;
 }
 
 // ---------- Saludo ----------

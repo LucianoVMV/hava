@@ -31,7 +31,9 @@ export function mostrarAviso(texto) {
   aviso.textContent = texto;
   aviso.classList.add("visible");
   clearTimeout(aviso._temporizador);
-  aviso._temporizador = setTimeout(() => aviso.classList.remove("visible"), 2000);
+  // Los mensajes largos se quedan más tiempo para alcanzar a leerlos (entre 2 y 6 s)
+  const duracion = Math.min(6000, 1500 + texto.length * 45);
+  aviso._temporizador = setTimeout(() => aviso.classList.remove("visible"), duracion);
 }
 
 const dosDigitos = (n) => String(n).padStart(2, "0");

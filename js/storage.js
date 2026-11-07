@@ -20,6 +20,7 @@ export const COLECCIONES = [
   "habitLogs",
   "water",
   "focusSessions",
+  "temporizador",
   "socialUsage",
   "sleep",
   "suenoEnCurso",

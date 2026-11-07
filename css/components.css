@@ -341,8 +341,11 @@
   bottom: calc(var(--alto-pestanas) + var(--seguro-abajo) + 16px);
   z-index: 20;
   transform: translate(-50%, 20px);
+  width: max-content;
+  max-width: min(440px, calc(100vw - 32px));
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: 18px;
+  text-align: center;
   background: var(--texto);
   color: var(--fondo);
   font-size: 15px;
@@ -840,4 +843,213 @@
 
 .detalle-desplegable .fila-2 {
   margin-top: 10px;
+}
+
+/* =========================================================
+   Enfoque (Pomodoro)
+   ========================================================= */
+
+.temporizador {
+  text-align: center;
+}
+
+.fase-actual {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: var(--acento-suave);
+  color: var(--acento);
+  font-weight: 600;
+}
+
+.fase-corto .fase-actual,
+.fase-largo .fase-actual {
+  background: color-mix(in srgb, var(--exito) 18%, var(--superficie));
+  color: var(--exito);
+}
+
+/* Círculo de progreso: un círculo de fondo y otro que se "descuenta" */
+.anillo {
+  position: relative;
+  width: min(240px, 70vw);
+  margin: 4px auto 8px;
+  aspect-ratio: 1;
+}
+
+.anillo svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* para que empiece arriba, como un reloj */
+}
+
+.anillo circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.anillo-fondo {
+  stroke: var(--fondo);
+}
+
+.anillo-progreso {
+  stroke: var(--acento);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.fase-corto .anillo-progreso,
+.fase-largo .anillo-progreso {
+  stroke: var(--exito);
+}
+
+.anillo-texto {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 2px;
+}
+
+.tiempo {
+  font-size: clamp(44px, 14vw, 60px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.puntos {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--borde);
+}
+
+.punto.lleno {
+  background: var(--acento);
+}
+
+.selector-curso {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.campo select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 17px;
+}
+
+/* Minutos por curso */
+.lista-cursos {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.lista-cursos li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.nombre-curso {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-curso {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--fondo);
+  overflow: hidden;
+}
+
+.barra-curso span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--acento);
+}
+
+.total-curso {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Historial de sesiones */
+.fila-sesion {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  font-size: 14px;
+}
+
+.lista-simple .fila-sesion + .fila-sesion {
+  border-top: 1px solid var(--borde);
+}
+
+.fila-sesion .fecha {
+  color: var(--texto-suave);
+}
+
+.fila-sesion .curso {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fila-sesion .min {
+  font-weight: 600;
+}
+
+/* Tarjeta desplegable completa (Ajustes del temporizador) */
+.detalle-tarjeta summary {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ajustes-enfoque {
+  margin-top: 12px;
+}
+
+.fila-interruptor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  font-size: 15px;
+}
+
+.fila-interruptor input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--acento);
+}
+
+.tarjeta-activa {
+  border: 2px solid var(--acento);
 }
