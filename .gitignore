@@ -1,0 +1,10 @@
+# Ajustes locales de Claude Code (personales, no se suben)
+.claude/settings.local.json
+
+# Archivos del sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Respaldos exportados de la app: contienen tus datos personales, nunca al repo
+*-respaldo*.json

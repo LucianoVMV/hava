@@ -1,0 +1,93 @@
+/* =========================================================
+   components.css — piezas reutilizables (tarjetas, listas, botones)
+   ========================================================= */
+
+.tarjeta {
+  background: var(--superficie);
+  border-radius: var(--radio);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.tarjeta h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.texto-suave {
+  color: var(--texto-suave);
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Etiqueta "En construcción" de las pantallas provisionales */
+.etiqueta {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--acento-suave);
+  color: var(--acento);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Lista de enlaces tipo "Ajustes" de iOS (usada en la pantalla Más) */
+.lista-menu {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  background: var(--superficie);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.lista-menu li + li {
+  border-top: 1px solid var(--borde);
+}
+
+.lista-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px; /* objetivo táctil grande */
+  padding: 0 16px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.lista-menu .emoji {
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+}
+
+.lista-menu .flecha {
+  margin-left: auto;
+  color: var(--texto-suave);
+  font-size: 22px;
+}
+
+.lista-menu a:active {
+  background: var(--borde);
+}
+
+/* Botón principal */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 12px;
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:active {
+  opacity: 0.8;
+}

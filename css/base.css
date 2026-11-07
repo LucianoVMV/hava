@@ -1,0 +1,169 @@
+/* =========================================================
+   base.css — variables de color, modo claro/oscuro y layout
+   ========================================================= */
+
+/* Colores en variables: así el modo oscuro solo cambia estos valores */
+:root {
+  --fondo: #f5f5f7;
+  --superficie: #ffffff;
+  --texto: #1c1c1e;
+  --texto-suave: #6e6e73;
+  --borde: #e2e2e7;
+  --acento: #4f46e5;
+  --acento-suave: #e0e7ff;
+  --exito: #16a34a;
+  --alerta: #dc2626;
+
+  --radio: 14px;
+  --alto-pestanas: 56px;
+  --ancho-max: 640px; /* en PC la app se centra con este ancho */
+
+  /* Márgenes seguros del iPhone (notch y barra de inicio).
+     En PC valen 0, así que no afectan. */
+  --seguro-arriba: env(safe-area-inset-top, 0px);
+  --seguro-abajo: env(safe-area-inset-bottom, 0px);
+  --seguro-izq: env(safe-area-inset-left, 0px);
+  --seguro-der: env(safe-area-inset-right, 0px);
+
+  color-scheme: light dark;
+}
+
+/* Modo oscuro automático, según la configuración del sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #111114;
+    --superficie: #1c1c20;
+    --texto: #f2f2f7;
+    --texto-suave: #9a9aa2;
+    --borde: #2c2c32;
+    --acento: #818cf8;
+    --acento-suave: #26264a;
+    --exito: #4ade80;
+    --alerta: #f87171;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Quita el destello gris al tocar en iOS */
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px; /* tamaño estándar de iOS; evita el zoom automático en inputs */
+  line-height: 1.45;
+}
+
+/* ---------- Barra superior ---------- */
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: calc(var(--seguro-arriba) + 10px) calc(var(--seguro-der) + 16px) 10px
+    calc(var(--seguro-izq) + 16px);
+  background: color-mix(in srgb, var(--fondo) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.barra-superior h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* En PC centramos el contenido de la barra */
+.barra-superior,
+.vista {
+  max-width: var(--ancho-max);
+  margin-inline: auto;
+}
+
+.btn-atras {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin-left: -12px;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--acento);
+  text-decoration: none;
+}
+
+.btn-atras[hidden] {
+  display: none;
+}
+
+/* ---------- Contenido ---------- */
+.vista {
+  /* El espacio de abajo evita que la barra de pestañas tape el contenido */
+  padding: 8px calc(var(--seguro-der) + 16px)
+    calc(var(--alto-pestanas) + var(--seguro-abajo) + 24px) calc(var(--seguro-izq) + 16px);
+  outline: none;
+}
+
+/* ---------- Barra de pestañas ---------- */
+.barra-pestanas {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--seguro-der) var(--seguro-abajo) var(--seguro-izq);
+  background: color-mix(in srgb, var(--superficie) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--borde);
+}
+
+.barra-pestanas a {
+  flex: 1;
+  max-width: calc(var(--ancho-max) / 4);
+  height: var(--alto-pestanas);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--texto-suave);
+  text-decoration: none;
+}
+
+.barra-pestanas svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Los puntitos de "Más" van rellenos */
+.barra-pestanas a[data-pestana="mas"] svg circle {
+  fill: currentColor;
+}
+
+.barra-pestanas a.activa {
+  color: var(--acento);
+}
