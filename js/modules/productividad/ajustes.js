@@ -9,10 +9,14 @@
 // Sirve para no perder nada si iOS borra los datos o cambias de dispositivo,
 // y para pasar datos entre la PC y el iPhone.
 //
-// (Metas generales y exportar a Calendario .ics se agregarán aquí más adelante.)
+// Recordatorios = un archivo .ics para el Calendario del iPhone: te avisa a
+// la hora elegida aunque Hava esté cerrada (algo que una app web no puede hacer).
 
-import { escaparHTML as esc, mostrarAviso, milo } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, milo, selectorHora, leerHora } from "../../utils/dom.js";
 import { hoyISO, fechaCorta } from "../../utils/fechas.js";
+import { entregarArchivo } from "../../utils/archivos.js";
+import { DIAS_SEMANA } from "./habitos-datos.js";
+import { leerRecordatorios, actualizarRecordatorio, generarArchivoICS } from "./recordatorios-datos.js";
 import {
   exportarDatos,
   importarDatos,
@@ -45,12 +49,17 @@ export function render(contenedor) {
   const raiz = document.createElement("div");
   contenedor.replaceChildren(raiz);
   raiz.addEventListener("click", (e) => alHacerClic(e, raiz));
-  raiz.addEventListener("change", (e) => alElegirArchivo(e, raiz));
+  raiz.addEventListener("change", (e) => {
+    if (e.target.id === "archivo-respaldo") alElegirArchivo(e, raiz);
+    else alCambiarRecordatorio(e, raiz);
+  });
+  raiz.addEventListener("submit", (e) => e.preventDefault());
   dibujar(raiz);
 }
 
 function dibujar(raiz) {
-  raiz.innerHTML = respaldoHTML() + almacenamientoHTML() + peligroHTML();
+  const ayudaAbierta = raiz.querySelector("#detalle-ics")?.open ?? false;
+  raiz.innerHTML = respaldoHTML() + calendarioHTML(ayudaAbierta) + almacenamientoHTML() + peligroHTML();
   mostrarPersistencia(raiz);
 }
 
@@ -74,6 +83,58 @@ function respaldoHTML() {
         En iPhone: al exportar se abre el menú Compartir → elige <strong>Guardar en Archivos</strong>
         (mejor en iCloud Drive). Para importar, elige ese mismo archivo.
       </p>
+    </section>`;
+}
+
+/** Recordatorios para el Calendario: cada uno con interruptor, hora y días. */
+function calendarioHTML(ayudaAbierta) {
+  const filas = leerRecordatorios()
+    .map((r) => {
+      const dias = [1, 2, 3, 4, 5, 6, 0]
+        .map(
+          (d) => `<label class="chip"><input type="checkbox" name="dias-${r.id}" value="${d}"${r.dias.includes(d) ? " checked" : ""}><span>${DIAS_SEMANA[d].charAt(0).toUpperCase()}</span></label>`
+        )
+        .join("");
+      return `
+        <li class="recordatorio ${r.activo ? "" : "inactivo"}" data-rec="${esc(r.id)}">
+          <label class="fila-interruptor">
+            <input type="checkbox" name="activo-${r.id}"${r.activo ? " checked" : ""}>
+            <span>${esc(r.titulo)}</span>
+          </label>
+          <div class="recordatorio-detalle">
+            ${selectorHora(`hora-${r.id}`, r.hora, { paso: 5 })}
+            <div class="chips dias dias-mini" role="group" aria-label="Días">${dias}</div>
+          </div>
+        </li>`;
+    })
+    .join("");
+
+  return `
+    <section class="tarjeta">
+      <h2>📅 Recordatorios en el Calendario</h2>
+      <p class="texto-suave">El Calendario del iPhone te avisa a la hora que elijas, aunque Hava esté cerrada.
+        Las descripciones llevan tus hábitos y tu checklist actuales.</p>
+      <form id="form-recordatorios"><ul class="lista-recordatorios">${filas}</ul></form>
+      <div class="pila-botones">
+        <button class="btn btn-bloque" data-accion="exportar-ics">📅 Exportar al Calendario (.ics)</button>
+      </div>
+      <details class="detalle-desplegable" id="detalle-ics"${ayudaAbierta ? " open" : ""}>
+        <summary>¿Cómo lo agrego al Calendario?</summary>
+        <div class="ayuda">
+          <h3 class="subtitulo">Antes (solo la primera vez)</h3>
+          <p class="texto-suave nota">En la app <strong>Calendario</strong> → <strong>Calendarios</strong> → <strong>Agregar calendario</strong> → llámalo «Hava».
+            Así, si después cambias algo, borras ese calendario y vuelves a importar sin duplicados.</p>
+          <h3 class="subtitulo">En el iPhone</h3>
+          <ol>
+            <li>Toca <strong>Exportar al Calendario</strong>.</li>
+            <li>En el menú Compartir elige <strong>Calendario</strong>; si no aparece, elige <strong>Guardar en Archivos</strong>.</li>
+            <li>Si lo guardaste: abre la app <strong>Archivos</strong>, toca <strong>hava-recordatorios.ics</strong>.</li>
+            <li>Toca <strong>Agregar todo</strong> y elige el calendario «Hava».</li>
+          </ol>
+          <h3 class="subtitulo">En la PC (Google Calendar)</h3>
+          <p class="texto-suave nota">Se descarga el archivo. En Google Calendar: ⚙️ Configuración → <strong>Importar y exportar</strong> → elige el archivo.</p>
+        </div>
+      </details>
     </section>`;
 }
 
@@ -124,6 +185,37 @@ function alHacerClic(e, raiz) {
   if (accion === "exportar") exportar(raiz);
   if (accion === "importar") raiz.querySelector("#archivo-respaldo").click();
   if (accion === "borrar-todo") borrarConConfirmacion(raiz);
+  if (accion === "exportar-ics") exportarCalendario();
+}
+
+// ---------- Recordatorios / Calendario ----------
+
+/** Guarda el recordatorio que cambiaste (interruptor, hora o días). */
+function alCambiarRecordatorio(e, raiz) {
+  const fila = e.target.closest("[data-rec]");
+  if (!fila) return;
+  const id = fila.dataset.rec;
+  const form = raiz.querySelector("#form-recordatorios");
+  const dias = [...fila.querySelectorAll(`[name="dias-${id}"]:checked`)].map((c) => Number(c.value));
+  if (!dias.length) {
+    mostrarAviso("Elige al menos un día");
+    e.target.checked = true;
+    return;
+  }
+  actualizarRecordatorio(id, {
+    activo: fila.querySelector(`[name="activo-${id}"]`).checked,
+    hora: leerHora(form, `hora-${id}`),
+    dias,
+  });
+  fila.classList.toggle("inactivo", !fila.querySelector(`[name="activo-${id}"]`).checked);
+}
+
+async function exportarCalendario() {
+  const contenido = generarArchivoICS();
+  if (!contenido) return mostrarAviso("Activa al menos un recordatorio");
+  const archivo = new File([contenido], "hava-recordatorios.ics", { type: "text/calendar" });
+  const resultado = await entregarArchivo(archivo);
+  if (resultado !== "cancelado") mostrarAviso("Archivo de calendario listo ✓");
 }
 
 // ---------- Exportar ----------
@@ -135,41 +227,9 @@ async function exportar(raiz) {
   const nombre = `hava-respaldo-${hoyISO()}.json`;
   const archivo = new File([texto], nombre, { type: "application/json" });
 
-  try {
-    const compartido = await compartirArchivo(archivo);
-    if (!compartido) descargarArchivo(archivo);
-    mostrarAviso("Respaldo listo ✓");
-  } catch (error) {
-    // Cerrar el menú Compartir sin elegir nada también llega aquí: no es un error real
-    if (error.name !== "AbortError") {
-      console.error(error);
-      descargarArchivo(archivo);
-    }
-  }
+  const resultado = await entregarArchivo(archivo);
+  if (resultado !== "cancelado") mostrarAviso("Respaldo listo ✓");
   dibujar(raiz);
-}
-
-/**
- * En celulares usamos el menú Compartir (en iPhone es la forma fiable de guardar
- * un archivo desde una app instalada). Devuelve false si no aplica.
- */
-async function compartirArchivo(archivo) {
-  const esTactil = window.matchMedia("(pointer: coarse)").matches;
-  if (!esTactil || !navigator.canShare?.({ files: [archivo] })) return false;
-  await navigator.share({ files: [archivo], title: archivo.name });
-  return true;
-}
-
-/** En PC: descarga normal del archivo. */
-function descargarArchivo(archivo) {
-  const url = URL.createObjectURL(archivo);
-  const enlace = document.createElement("a");
-  enlace.href = url;
-  enlace.download = archivo.name;
-  document.body.append(enlace);
-  enlace.click();
-  enlace.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ---------- Importar ----------

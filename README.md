@@ -17,9 +17,7 @@ Hava es la primera app de una familia de apps personales. Todas tienen la misma 
 | Redes | Registro manual de minutos por app, límite diario/semanal, tendencia y comparación con la semana pasada |
 | Sueño | "Me voy a dormir" / "Ya desperté", registro manual, promedio, regularidad, gráfico semanal |
 | Resumen | Semana actual vs. anterior en hábitos, estudio, sueño, agua y redes, con conclusiones accionables |
-| Ajustes | Exportar/importar respaldo `.json`, borrar todos los datos |
-
-Próximamente: exportar recordatorios a Calendario (`.ics`).
+| Ajustes | Respaldo `.json` (exportar/importar), recordatorios para el Calendario (`.ics` con alarmas), borrar todos los datos |
 
 📱 **Guía para el iPhone** (límites reales de apps, avisos al abrir Instagram, recordatorio al salir de casa): [docs/atajos-ios.md](docs/atajos-ios.md)
 
