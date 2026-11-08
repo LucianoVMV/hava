@@ -124,13 +124,14 @@ function calendarioHTML(ayudaAbierta) {
           <h3 class="subtitulo">Antes (solo la primera vez)</h3>
           <p class="texto-suave nota">En la app <strong>Calendario</strong> → <strong>Calendarios</strong> → <strong>Agregar calendario</strong> → llámalo «Hava».
             Así, si después cambias algo, borras ese calendario y vuelves a importar sin duplicados.</p>
-          <h3 class="subtitulo">En el iPhone</h3>
+          <h3 class="subtitulo">En el iPhone (por correo, la forma que siempre funciona)</h3>
           <ol>
             <li>Toca <strong>Exportar al Calendario</strong>.</li>
-            <li>En el menú Compartir elige <strong>Calendario</strong>; si no aparece, elige <strong>Guardar en Archivos</strong>.</li>
-            <li>Si lo guardaste: abre la app <strong>Archivos</strong>, toca <strong>hava-recordatorios.ics</strong>.</li>
+            <li>En el menú Compartir elige <strong>Mail</strong> y envíatelo a tu propio correo.</li>
+            <li>Abre el correo en la app <strong>Mail de Apple</strong> (no Gmail) y toca el adjunto <strong>hava-recordatorios.ics</strong>.</li>
             <li>Toca <strong>Agregar todo</strong> y elige el calendario «Hava».</li>
           </ol>
+          <p class="texto-suave nota">La app Archivos a veces no muestra «Agregar todo» para estos archivos: por eso usamos Mail.</p>
           <h3 class="subtitulo">En la PC (Google Calendar)</h3>
           <p class="texto-suave nota">Se descarga el archivo. En Google Calendar: ⚙️ Configuración → <strong>Importar y exportar</strong> → elige el archivo.</p>
         </div>
