@@ -22,6 +22,8 @@ import {
 } from "./habitos-datos.js";
 import * as agua from "./agua-datos.js";
 import * as enfoque from "./enfoque-datos.js";
+import * as redes from "./redes-datos.js";
+import { sumarDias } from "../../utils/fechas.js";
 import {
   leerRegistros,
   leerMetas as leerMetasSueno,
@@ -55,8 +57,43 @@ function dibujar(raiz) {
     habitosHTML(hoy, hora) +
     enfoqueHTML(hoy) +
     aguaHTML(hoy, hora, aguaAbierta) +
+    redesHTML(hoy, hora) +
     suenoHTML(hoy, hora) +
     salidaHTML();
+}
+
+// ---------- Redes (acceso rápido) ----------
+
+/**
+ * En la mañana recuerda anotar lo de AYER (si falta).
+ * Si no, muestra el tiempo de hoy (si ya lo anotaste) o del último día anotado.
+ */
+function redesHTML(hoy, hora) {
+  const { limiteDiario } = redes.leerConfig();
+  const ayer = sumarDias(hoy, -1);
+  const uso = redes.leerUso();
+  let texto;
+  let clase = "";
+
+  if (aMinutos(hora) < 12 * 60 && !redes.registrado(ayer, uso)) {
+    texto = "Anota tu tiempo de ayer";
+    clase = "tarjeta-activa";
+  } else {
+    const dia = redes.registrado(hoy, uso) ? hoy : redes.registrado(ayer, uso) ? ayer : null;
+    if (dia) {
+      const total = redes.totalDelDia(dia, uso);
+      const icono = { ok: "✅", cerca: "⚠️", pasado: "🔴" }[redes.estadoLimite(total, limiteDiario)];
+      texto = `${icono} ${dia === hoy ? "Hoy" : "Ayer"}: ${formatoDuracion(total)} de ${formatoDuracion(limiteDiario)}`;
+    } else {
+      texto = `Límite: ${formatoDuracion(limiteDiario)} al día`;
+    }
+  }
+
+  return `
+    <a class="tarjeta tarjeta-enlace ${clase}" href="#/redes">
+      <span>📱 Redes</span>
+      <span class="texto-suave">${esc(texto)} ›</span>
+    </a>`;
 }
 
 // ---------- Enfoque (acceso rápido) ----------

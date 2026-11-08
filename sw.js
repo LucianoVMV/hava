@@ -11,7 +11,7 @@
 //
 // Al agregar un archivo nuevo a la app, súmalo a ARCHIVOS y sube la VERSION.
 
-const VERSION = "v8";
+const VERSION = "v9";
 const CACHE = `hava-${VERSION}`;
 
 // Archivos que se guardan apenas se instala la app (el "esqueleto")
@@ -30,6 +30,7 @@ const ARCHIVOS = [
   "./js/modules/productividad/habitos-datos.js",
   "./js/modules/productividad/agua-datos.js",
   "./js/modules/productividad/enfoque-datos.js",
+  "./js/modules/productividad/redes-datos.js",
   "./js/utils/avisos.js",
   "./js/modules/productividad/hoy.js",
   "./js/modules/productividad/habitos.js",

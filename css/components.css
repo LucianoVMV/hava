@@ -1124,3 +1124,117 @@
 .tarjeta-destacada .milo {
   margin: 0 auto 6px;
 }
+
+/* =========================================================
+   Redes sociales
+   ========================================================= */
+
+.chips-fecha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip-boton {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.chip-boton.activo {
+  border-color: var(--acento);
+  background: var(--acento-suave);
+  color: var(--acento);
+  font-weight: 600;
+}
+
+.input-fecha {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 15px;
+}
+
+/* Fila "Instagram [ 1 h 20 min ]" */
+.fila-app {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+}
+
+.fila-app + .fila-app {
+  border-top: 1px solid var(--borde);
+}
+
+.fila-app input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 17px;
+  text-align: right;
+}
+
+/* Colores según el límite: verde (bien), amarillo (cerca), rojo (te pasaste) */
+.barra-ok > div {
+  background: var(--exito);
+}
+
+.barra-cerca > div {
+  background: var(--destacado);
+}
+
+.barra-pasado > div {
+  background: var(--alerta);
+}
+
+.contador.estado-cerca {
+  color: var(--destacado);
+}
+
+.contador.estado-pasado {
+  color: var(--alerta);
+}
+
+.cambio {
+  margin: 8px 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.cambio-bueno {
+  color: var(--exito);
+}
+
+.cambio-malo {
+  color: var(--alerta);
+}
+
+.ayuda ol,
+.ayuda ul {
+  margin: 4px 0 8px;
+  padding-left: 22px;
+  font-size: 15px;
+}
+
+.ayuda li + li {
+  margin-top: 6px;
+}
