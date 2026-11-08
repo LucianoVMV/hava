@@ -82,7 +82,7 @@
   border: none;
   border-radius: 12px;
   background: var(--acento);
-  color: #fff;
+  color: var(--sobre-acento);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -448,7 +448,7 @@
   height: 28px;
   border: 2px solid var(--borde);
   border-radius: 50%;
-  color: #fff;
+  color: var(--sobre-acento);
   font-size: 16px;
   font-weight: 700;
   transition: background 0.15s, border-color 0.15s;
@@ -795,7 +795,7 @@
   width: 30px;
   height: 40px;
   padding: 0;
-  border: 2px solid color-mix(in srgb, var(--acento) 55%, var(--borde));
+  border: 2px solid color-mix(in srgb, var(--acento) 80%, var(--borde));
   border-top-width: 1px;
   border-radius: 3px 3px 9px 9px;
   background: transparent;
@@ -1052,4 +1052,75 @@
 
 .tarjeta-activa {
   border: 2px solid var(--acento);
+}
+
+/* =========================================================
+   Milo (mascota)
+   ========================================================= */
+
+.milo {
+  display: block;
+  flex: none;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.milo-chico {
+  width: 56px;
+}
+
+.milo-medio {
+  width: 88px;
+}
+
+.milo-grande {
+  width: 120px;
+}
+
+/* En modo oscuro, un halo suave para que el contorno oscuro de Milo no se pierda */
+@media (prefers-color-scheme: dark) {
+  .milo {
+    filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.35)) drop-shadow(0 0 6px rgb(255 255 255 / 0.08));
+  }
+}
+
+/* Milo al lado de un texto */
+.fila-milo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0 4px;
+}
+
+.fila-milo p {
+  margin: 0;
+}
+
+/* Saludo de Hoy con Milo a la derecha */
+.saludo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.saludo-subtexto {
+  margin: 2px 0 0;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+/* Milo arriba del temporizador */
+.temporizador .milo {
+  margin: 0 auto 4px;
+}
+
+.racha {
+  color: var(--destacado);
+}
+
+.tarjeta-destacada .milo {
+  margin: 0 auto 6px;
 }

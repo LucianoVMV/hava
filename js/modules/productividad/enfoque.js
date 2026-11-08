@@ -8,7 +8,7 @@
 //  2. Un reloj de PANTALLA (4 veces por segundo, solo mientras ves Enfoque):
 //     actualiza el círculo y los números sin redibujar todo.
 
-import { escaparHTML as esc, mostrarAviso } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, milo } from "../../utils/dom.js";
 import { hoyISO, horaActual, diaCorto, fechaCorta, formatoDuracion } from "../../utils/fechas.js";
 import { graficoBarras } from "../../utils/graficos.js";
 import { desbloquearAudio, sonarAviso, mantenerPantalla, pantallaSoportada } from "../../utils/avisos.js";
@@ -124,8 +124,17 @@ function temporizadorHTML(t, config) {
                ${t.fase !== "enfoque" ? `<button class="btn btn-secundario" data-accion="saltar">Saltar</button>` : ""}`;
   }
 
+  // Milo acompaña cada fase: esperando, estudiando, en pausa, descanso corto o largo
+  const pose =
+    t.fase === "corto" ? "cafe"
+    : t.fase === "largo" ? "meditacion"
+    : t.estado === "corriendo" ? "laptop"
+    : t.estado === "pausado" ? "musica"
+    : "estudio";
+
   return `
     <section class="tarjeta temporizador fase-${t.fase}">
+      ${milo(pose, { tamano: "medio" })}
       <p class="fase-actual">${fase.emoji} ${fase.nombre}</p>
       <div class="anillo">
         <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -164,7 +173,7 @@ function actualizarReloj(raiz) {
     horaFin.textContent =
       t.estado === "corriendo" ? `termina ${horaActual(new Date(t.fin))}` : t.estado === "pausado" ? "en pausa" : "";
   }
-  document.title = t.estado === "listo" ? "Enfoque · Mini Apps" : `${texto} · ${e.FASES[t.fase].nombre}`;
+  document.title = t.estado === "listo" ? "Enfoque · Hava" : `${texto} · ${e.FASES[t.fase].nombre}`;
 }
 
 // ---------- Hoy / semana ----------

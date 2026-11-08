@@ -8,7 +8,7 @@
 //   - form:    crear o editar un hábito
 // La variable `pantalla` dice cuál se muestra. Los cálculos están en habitos-datos.js.
 
-import { escaparHTML as esc, mostrarAviso } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, milo } from "../../utils/dom.js";
 import { hoyISO, fechaCorta } from "../../utils/fechas.js";
 import { mapaCalor } from "../../utils/graficos.js";
 import {
@@ -96,7 +96,8 @@ function listaHTML() {
         <span class="contador">${hechos}/${deHoy.length}</span>
       </div>
       ${barraProgresoHTML(hechos, deHoy.length)}
-      ${deHoy.length ? grupos : `<p class="texto-suave">Hoy no te toca ningún hábito.</p>`}
+      ${deHoy.length && hechos === deHoy.length ? `<div class="fila-milo">${milo("tareas", { tamano: "chico" })}<p class="mensaje-exito">¡Todo listo por hoy! Milo está orgulloso.</p></div>` : ""}
+      ${deHoy.length ? grupos : `<div class="fila-milo">${milo("ideas", { tamano: "chico" })}<p class="texto-suave">Hoy no te toca ningún hábito.</p></div>`}
       ${noTocan.length ? `<p class="texto-suave nota">Hoy descansan: ${noTocan.map((h) => esc(h.emoji + " " + h.nombre)).join(", ")}.</p>` : ""}
     </section>
     ${salidaHTML()}
@@ -188,7 +189,9 @@ function salidaHTML() {
         <h2>🚪 Antes de salir</h2>
         <button class="btn-texto compacto" data-accion="editar-salida">${editandoSalida ? "Listo" : "Editar"}</button>
       </div>
-      ${editandoSalida ? "" : `<p class="texto-suave">${todoListo ? "¡Todo listo, puedes salir! 🎉" : `${listos}/${items.length} listos · se reinicia cada día`}</p>`}
+      ${editandoSalida ? "" : todoListo
+        ? `<div class="fila-milo">${milo("caminata", { tamano: "chico" })}<p class="mensaje-exito">¡Todo listo, puedes salir!</p></div>`
+        : `<p class="texto-suave">${listos}/${items.length} listos · se reinicia cada día</p>`}
       <ul class="lista-checks">${filas}</ul>
       ${formAgregar}
     </section>`;
@@ -204,6 +207,12 @@ function detalleHTML(h) {
   const logs = leerLogs();
   const pct = porcentajeCumplimiento(h, logs, 30, hoy);
   const momento = MOMENTOS.find((m) => m.id === h.momento);
+  const rachaActual = racha(h, logs, hoy);
+  // Rachas largas: Milo con su trofeo
+  const festejo =
+    rachaActual >= 7
+      ? `<div class="fila-milo">${milo("logro", { tamano: "chico" })}<p class="mensaje-exito">¡${rachaActual} ${h.frecuencia.tipo === "diario" ? "días" : "veces"} seguidos! Sigue así.</p></div>`
+      : "";
 
   return `
     <button class="btn-texto volver" data-accion="volver">‹ Hábitos</button>
@@ -212,10 +221,11 @@ function detalleHTML(h) {
       <p class="texto-suave">${momento.emoji} ${momento.nombre} · ${esc(textoFrecuencia(h.frecuencia))}${h.archivado ? " · archivado" : ""}</p>
       ${h.nota ? `<p class="texto-suave">${esc(h.nota)}</p>` : ""}
       <div class="estadisticas">
-        <div class="estadistica"><span class="valor">🔥 ${racha(h, logs, hoy)}</span><span class="nombre">racha actual</span></div>
+        <div class="estadistica"><span class="valor">🔥 ${rachaActual}</span><span class="nombre">racha actual</span></div>
         <div class="estadistica"><span class="valor">${mejorRacha(h, logs, hoy)}</span><span class="nombre">mejor racha</span></div>
         <div class="estadistica"><span class="valor">${pct === null ? "—" : pct + "%"}</span><span class="nombre">últimos 30 días</span></div>
       </div>
+      ${festejo}
     </section>
     <section class="tarjeta">
       <h2>Últimas 12 semanas</h2>

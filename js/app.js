@@ -60,7 +60,7 @@ function navegar() {
   const { modulo, pestana, atras } = RUTAS[nombre];
 
   tituloVista.textContent = modulo.titulo;
-  document.title = `${modulo.titulo} · Mini Apps`;
+  document.title = `${modulo.titulo} · Hava`;
   btnAtras.hidden = !atras;
   marcarPestana(pestana);
 

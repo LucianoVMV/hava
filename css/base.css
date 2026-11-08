@@ -2,17 +2,21 @@
    base.css — variables de color, modo claro/oscuro y layout
    ========================================================= */
 
-/* Colores en variables: así el modo oscuro solo cambia estos valores */
+/* Colores en variables: así el modo oscuro solo cambia estos valores.
+   Paleta de Hava, sacada del logo:
+     verde azulado (principal) · verde de Milo (éxito) · amarillo del pico (rachas) · crema (fondo) */
 :root {
-  --fondo: #f5f5f7;
-  --superficie: #ffffff;
-  --texto: #1c1c1e;
-  --texto-suave: #6e6e73;
-  --borde: #e2e2e7;
-  --acento: #4f46e5;
-  --acento-suave: #e0e7ff;
-  --exito: #16a34a;
-  --alerta: #dc2626;
+  --fondo: #f5eee3;
+  --superficie: #fffdf8;
+  --texto: #13292c;
+  --texto-suave: #5d6c6d;
+  --borde: #e6dccd;
+  --acento: #07464f; /* verde azulado del logo */
+  --acento-suave: #dcebe8;
+  --sobre-acento: #ffffff; /* texto encima de botones de color */
+  --exito: #4b8459; /* verde de Milo (un poco más oscuro para que se lea) */
+  --destacado: #e9a63e; /* amarillo del pico de Milo */
+  --alerta: #c2412f;
 
   --radio: 14px;
   --alto-pestanas: 56px;
@@ -31,15 +35,17 @@
 /* Modo oscuro automático, según la configuración del sistema */
 @media (prefers-color-scheme: dark) {
   :root {
-    --fondo: #111114;
-    --superficie: #1c1c20;
-    --texto: #f2f2f7;
-    --texto-suave: #9a9aa2;
-    --borde: #2c2c32;
-    --acento: #818cf8;
-    --acento-suave: #26264a;
-    --exito: #4ade80;
-    --alerta: #f87171;
+    --fondo: #0b1a1d;
+    --superficie: #13272b;
+    --texto: #f3ede3;
+    --texto-suave: #9fb1b2;
+    --borde: #23393d;
+    --acento: #6cc0bb; /* el verde azulado, más claro para que resalte en lo oscuro */
+    --acento-suave: #1b3c3f;
+    --sobre-acento: #06292d;
+    --exito: #7cc48c;
+    --destacado: #f2b352;
+    --alerta: #f08a78;
   }
 }
 

@@ -11,8 +11,8 @@
 //
 // Al agregar un archivo nuevo a la app, súmalo a ARCHIVOS y sube la VERSION.
 
-const VERSION = "v7";
-const CACHE = `mini-apps-${VERSION}`;
+const VERSION = "v8";
+const CACHE = `hava-${VERSION}`;
 
 // Archivos que se guardan apenas se instala la app (el "esqueleto")
 const ARCHIVOS = [
@@ -39,11 +39,17 @@ const ARCHIVOS = [
   "./js/modules/productividad/sueno.js",
   "./js/modules/productividad/resumen.js",
   "./js/modules/productividad/ajustes.js",
-  "./icons/icono.svg",
+  "./icons/favicon-32.png",
   "./icons/icon-180.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",
+  // Milo (todas las poses, para que aparezca también sin internet)
+  ...[
+    "agua", "cafe", "calendario", "caminata", "celebracion", "descanso",
+    "ejercicio", "estudio", "ideas", "laptop", "logro", "meditacion",
+    "musica", "notificaciones", "objetivos", "preocupado", "saludo", "tareas",
+  ].map((pose) => `./img/milo/${pose}.webp`),
 ];
 
 // 1) Instalación: descarga y guarda todos los archivos

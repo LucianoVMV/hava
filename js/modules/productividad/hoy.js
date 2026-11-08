@@ -6,7 +6,7 @@
 // No guarda nada propio: usa las funciones de cada *-datos.js,
 // así la lógica vive en un solo sitio y no se duplica.
 
-import { escaparHTML as esc, mostrarAviso } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, milo } from "../../utils/dom.js";
 import { ZONA, hoyISO, horaActual, aMinutos, diaCorto, formatoDuracion } from "../../utils/fechas.js";
 import { graficoBarras } from "../../utils/graficos.js";
 import {
@@ -51,7 +51,7 @@ function dibujar(raiz) {
   const hoy = hoyISO();
   const hora = horaActual();
   raiz.innerHTML =
-    saludoHTML(hora) +
+    saludoHTML(hoy, hora) +
     habitosHTML(hoy, hora) +
     enfoqueHTML(hoy) +
     aguaHTML(hoy, hora, aguaAbierta) +
@@ -81,14 +81,39 @@ function enfoqueHTML(hoy) {
 
 // ---------- Saludo ----------
 
-function saludoHTML(hora) {
+/**
+ * Saludo con Milo. Milo cambia según lo que está pasando (en orden de prioridad):
+ * durmiendo → estudiando → completaste todo → según la hora del día.
+ */
+function saludoHTML(hoy, hora) {
   const h = aMinutos(hora) / 60;
-  const saludo = h < 12 ? "Buenos días" : h < 19 ? "Buenas tardes" : "Buenas noches";
   const fecha = new Date().toLocaleDateString("es-PE", { timeZone: ZONA, weekday: "long", day: "numeric", month: "long" });
+  const logs = leerLogs();
+  const deHoy = habitosActivos().filter((x) => tocaEnFecha(x, hoy, logs));
+  const todoHecho = deHoy.length > 0 && deHoy.every((x) => estaHecho(logs, x.id, hoy));
+
+  let saludo = h < 12 ? "Buenos días" : h < 19 ? "Buenas tardes" : "Buenas noches";
+  let pose = h < 12 ? "saludo" : h < 19 ? "cafe" : "meditacion";
+  let subtexto = "";
+  if (leerSuenoEnCurso()) {
+    pose = "descanso";
+    subtexto = "Milo sigue dormido… ¿y tú?";
+  } else if (enfoque.leerTemporizador().estado === "corriendo") {
+    pose = "laptop";
+    subtexto = "Modo enfoque activado 💪";
+  } else if (todoHecho) {
+    pose = "celebracion";
+    subtexto = "¡Completaste todos tus hábitos!";
+  }
+
   return `
     <div class="saludo">
-      <p class="saludo-texto">${saludo} 👋</p>
-      <p class="texto-suave">${esc(fecha.charAt(0).toUpperCase() + fecha.slice(1))}</p>
+      <div>
+        <p class="saludo-texto">${saludo} 👋</p>
+        <p class="texto-suave">${esc(fecha.charAt(0).toUpperCase() + fecha.slice(1))}</p>
+        ${subtexto ? `<p class="saludo-subtexto">${esc(subtexto)}</p>` : ""}
+      </div>
+      ${milo(pose, { tamano: "medio" })}
     </div>`;
 }
 
@@ -168,7 +193,7 @@ function aguaHTML(hoy, hora, abierta) {
   const extra = vasos > meta ? `<span class="vasos-extra">+${vasos - meta}</span>` : "";
 
   let estado;
-  if (faltan === 0) estado = `<p class="mensaje-exito">¡Meta cumplida! 🎉</p>`;
+  if (faltan === 0) estado = `<div class="fila-milo">${milo("agua", { tamano: "chico" })}<p class="mensaje-exito">¡Meta cumplida! Milo también brinda 🎉</p></div>`;
   else if (vasos < esperados) estado = `<p class="texto-suave">⏰ A esta hora lo ideal es llevar ~${esperados}. Te faltan ${faltan}.</p>`;
   else estado = `<p class="texto-suave">👍 Vas a buen ritmo. Te faltan ${faltan}.</p>`;
 

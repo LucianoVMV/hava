@@ -8,7 +8,7 @@
 //  - Funciones *HTML(): cada una arma el HTML de una tarjeta.
 // Los cálculos viven en sueno-datos.js, aquí solo hay pantalla.
 
-import { escaparHTML as esc, mostrarAviso, selectorHora, leerHora } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, selectorHora, leerHora, milo } from "../../utils/dom.js";
 import {
   hoyISO,
   horaActual,
@@ -81,6 +81,7 @@ function rapidoHTML(enCurso) {
   if (enCurso) {
     return `
       <section class="tarjeta tarjeta-destacada">
+        ${milo("descanso", { tamano: "medio" })}
         <p class="texto-suave">🌙 Durmiendo desde las <strong>${esc(enCurso.horaDormir)}</strong></p>
         <button class="btn btn-bloque" data-accion="desperte">☀️ Ya desperté</button>
         <button class="btn-texto" data-accion="cancelar-sueno">Cancelar</button>

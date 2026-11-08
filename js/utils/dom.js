@@ -36,6 +36,18 @@ export function mostrarAviso(texto) {
   aviso._temporizador = setTimeout(() => aviso.classList.remove("visible"), duracion);
 }
 
+/**
+ * Ilustración de Milo, el patito de Hava.
+ * @param {string} pose   nombre del archivo en img/milo/ (saludo, laptop, agua…)
+ * @param {object} [op]
+ * @param {"chico"|"medio"|"grande"} [op.tamano="medio"]
+ * @param {string} [op.texto]  descripción para lectores de pantalla (si no, es decorativo)
+ */
+export function milo(pose, { tamano = "medio", texto = "" } = {}) {
+  const accesible = texto ? `alt="${escaparHTML(texto)}"` : `alt="" aria-hidden="true"`;
+  return `<img class="milo milo-${tamano}" src="img/milo/${pose}.webp" ${accesible} decoding="async">`;
+}
+
 const dosDigitos = (n) => String(n).padStart(2, "0");
 
 /**

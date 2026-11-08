@@ -8,8 +8,16 @@
 // Cómo se guarda: cada "colección" (sleep, habits, settings…) es un valor JSON
 // en localStorage con la clave "miniapps.<coleccion>".
 // Todo vive en tu dispositivo: no se envía a ningún servidor.
+//
+// Nota: el prefijo "miniapps." viene de cuando la app se llamaba "Mini Apps".
+// No lo cambiamos a "hava." a propósito: cambiarlo haría que la app no encuentre
+// los datos que ya guardaste. Es interno, no se ve en ningún lado.
 
 const PREFIJO = "miniapps.";
+
+/** Identificador de la app dentro de los respaldos (se aceptan también los viejos). */
+const ID_APP = "hava";
+const IDS_ACEPTADOS = ["hava", "mini-apps"];
 
 /** Versión del formato de datos. Si algún día cambia, sirve para migrar respaldos viejos. */
 export const VERSION_ESQUEMA = 1;
@@ -115,7 +123,7 @@ export function exportarDatos() {
     if (valor !== null) datos[c] = valor;
   }
   return {
-    app: "mini-apps",
+    app: ID_APP,
     versionEsquema: VERSION_ESQUEMA,
     exportado: new Date().toISOString(),
     datos,
@@ -127,8 +135,8 @@ export function exportarDatos() {
  * mensaje claro si no lo es. Se usa ANTES de borrar nada.
  */
 export function validarRespaldo(respaldo) {
-  if (!respaldo || respaldo.app !== "mini-apps" || typeof respaldo.datos !== "object" || respaldo.datos === null) {
-    throw new Error("El archivo no es un respaldo válido de Mini Apps.");
+  if (!respaldo || !IDS_ACEPTADOS.includes(respaldo.app) || typeof respaldo.datos !== "object" || respaldo.datos === null) {
+    throw new Error("El archivo no es un respaldo válido de Hava.");
   }
   if (!Number.isInteger(respaldo.versionEsquema) || respaldo.versionEsquema < 1) {
     throw new Error("El respaldo no indica su versión de datos.");

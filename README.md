@@ -1,18 +1,21 @@
-# Mini Apps
+<p align="center"><img src="icons/icon-192.png" width="96" alt="Hava"></p>
 
-Suite de mini apps personales hecha como **PWA** (app web instalable), pensada primero para iPhone y que también funciona en PC.
+# Hava — Hábitos y productividad
+
+App personal de hábitos y productividad hecha como **PWA** (app web instalable), pensada primero para iPhone y que también funciona en PC.
 HTML + CSS + JavaScript puro, sin frameworks ni dependencias, y **funciona sin internet** después de la primera carga.
 
-**Módulo actual: Productividad y hábitos**
+Hava es la primera app de una familia de apps personales. Todas tienen la misma mascota: **Milo** 🦆, un patito de cabeza verde que cambia de estilo según la app.
 
 | Pantalla | Qué hace |
 |---|---|
-| Hoy | Hábitos pendientes del momento, contador de agua, resumen de sueño, "Antes de salir" |
+| Hoy | Saludo con Milo, hábitos pendientes, acceso a Enfoque, contador de agua, sueño, "Antes de salir" |
 | Hábitos | Hábitos diarios, por días o "cada N días", rachas 🔥, mapa de calor, checklist "Antes de salir" |
+| Enfoque | Temporizador Pomodoro, cursos, meta diaria, historial y minutos por curso |
 | Sueño | "Me voy a dormir" / "Ya desperté", registro manual, promedio, regularidad, gráfico semanal |
 | Ajustes | Exportar/importar respaldo `.json`, borrar todos los datos |
 
-Próximamente: Enfoque (Pomodoro), Redes sociales, Resumen semanal, exportar recordatorios a Calendario (`.ics`).
+Próximamente: Redes sociales, Resumen semanal, exportar recordatorios a Calendario (`.ics`).
 
 ## Privacidad
 
@@ -64,7 +67,19 @@ js/app.js                router entre pantallas
 js/storage.js            capa de datos + exportar/importar
 js/utils/                fechas (zona Lima), gráficos SVG, ayudas de DOM
 js/modules/productividad/  una pantalla por archivo + *-datos.js con la lógica
-icons/                   íconos (generados con tools/generar-iconos.ps1)
+icons/                   íconos de la app (generados desde el logo)
+img/milo/                ilustraciones de Milo optimizadas (WebP)
+diseno/                  originales: logo y patitos de Milo
+tools/                   scripts de desarrollo (Python + Pillow)
+```
+
+### Regenerar íconos e ilustraciones
+
+Si cambias el logo o agregas un patito en `diseno/`:
+
+```bash
+python tools/generar-iconos.py
+python tools/procesar-milo.py
 ```
 
 Al agregar un archivo nuevo, súmalo a la lista `ARCHIVOS` de `sw.js` y sube `VERSION`.

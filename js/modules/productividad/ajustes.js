@@ -11,7 +11,7 @@
 //
 // (Metas generales y exportar a Calendario .ics se agregarán aquí más adelante.)
 
-import { escaparHTML as esc, mostrarAviso } from "../../utils/dom.js";
+import { escaparHTML as esc, mostrarAviso, milo } from "../../utils/dom.js";
 import { hoyISO, fechaCorta } from "../../utils/fechas.js";
 import {
   exportarDatos,
@@ -58,10 +58,13 @@ function dibujar(raiz) {
 
 function respaldoHTML() {
   const { ultimo } = leerAjustes("respaldo", { ultimo: null });
+  // Milo se preocupa si nunca hiciste respaldo o si pasó una semana o más
+  const atrasado = !ultimo || Date.parse(hoyISO()) - Date.parse(ultimo) >= DIAS_AVISO * 86400000;
+  const texto = `<p class="texto-suave">${textoUltimoRespaldo(ultimo)}</p>`;
   return `
     <section class="tarjeta">
       <h2>Respaldo</h2>
-      <p class="texto-suave">${textoUltimoRespaldo(ultimo)}</p>
+      ${atrasado ? `<div class="fila-milo">${milo("preocupado", { tamano: "chico" })}${texto}</div>` : texto}
       <div class="pila-botones">
         <button class="btn btn-bloque" data-accion="exportar">⬇️ Exportar respaldo</button>
         <button class="btn btn-bloque btn-secundario" data-accion="importar">⬆️ Importar respaldo</button>
@@ -129,7 +132,7 @@ async function exportar(raiz) {
   // Guardamos la fecha ANTES de exportar, así el propio respaldo la incluye
   guardarAjustes("respaldo", { ultimo: hoyISO() });
   const texto = JSON.stringify(exportarDatos(), null, 2);
-  const nombre = `mini-apps-respaldo-${hoyISO()}.json`;
+  const nombre = `hava-respaldo-${hoyISO()}.json`;
   const archivo = new File([texto], nombre, { type: "application/json" });
 
   try {
