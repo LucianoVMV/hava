@@ -1238,3 +1238,132 @@
 .ayuda li + li {
   margin-top: 6px;
 }
+
+/* =========================================================
+   Resumen semanal
+   ========================================================= */
+
+.resumen-cabecera {
+  text-align: center;
+}
+
+.resumen-cabecera .milo {
+  margin: 8px auto 4px;
+}
+
+.nav-semana {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-semana .btn-icono {
+  font-size: 30px;
+  color: var(--acento);
+}
+
+.nav-semana .btn-icono:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.nav-titulo {
+  margin: 0;
+  font-weight: 700;
+}
+
+.resumen-titulo {
+  margin: 4px 0 8px !important;
+  font-size: 20px !important;
+}
+
+.lista-conclusiones {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.lista-conclusiones li {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.lista-conclusiones .logro {
+  background: color-mix(in srgb, var(--exito) 14%, var(--superficie));
+}
+
+.lista-conclusiones .mejorar {
+  background: color-mix(in srgb, var(--destacado) 16%, var(--superficie));
+}
+
+/* Filas de métricas: ícono · nombre y detalle · valor y cambio */
+.lista-metricas {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+
+.fila-metrica {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.fila-metrica + .fila-metrica {
+  border-top: 1px solid var(--borde);
+}
+
+.metrica-icono {
+  font-size: 22px;
+}
+
+.metrica-textos {
+  display: grid;
+  min-width: 0;
+}
+
+.metrica-nombre {
+  font-weight: 600;
+}
+
+.metrica-detalle {
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+.metrica-valor {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.chip-cambio {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.chip-cambio.bueno {
+  color: var(--exito);
+  background: color-mix(in srgb, var(--exito) 14%, var(--superficie));
+}
+
+.chip-cambio.malo {
+  color: var(--alerta);
+  background: color-mix(in srgb, var(--alerta) 12%, var(--superficie));
+}
+
+.chip-cambio.neutro {
+  color: var(--texto-suave);
+}

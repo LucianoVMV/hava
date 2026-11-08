@@ -23,7 +23,7 @@ import {
 import * as agua from "./agua-datos.js";
 import * as enfoque from "./enfoque-datos.js";
 import * as redes from "./redes-datos.js";
-import { sumarDias } from "../../utils/fechas.js";
+import { sumarDias, diaSemana } from "../../utils/fechas.js";
 import {
   leerRegistros,
   leerMetas as leerMetasSueno,
@@ -54,12 +54,25 @@ function dibujar(raiz) {
   const hora = horaActual();
   raiz.innerHTML =
     saludoHTML(hoy, hora) +
+    resumenHTML(hoy) +
     habitosHTML(hoy, hora) +
     enfoqueHTML(hoy) +
     aguaHTML(hoy, hora, aguaAbierta) +
     redesHTML(hoy, hora) +
     suenoHTML(hoy, hora) +
     salidaHTML();
+}
+
+// ---------- Resumen semanal (domingos y lunes) ----------
+
+/** El domingo cierra la semana y el lunes empieza otra: buen momento para revisarla. */
+function resumenHTML(hoy) {
+  if (![0, 1].includes(diaSemana(hoy))) return "";
+  return `
+    <a class="tarjeta tarjeta-enlace tarjeta-activa" href="#/resumen">
+      <span>📊 Tu resumen semanal</span>
+      <span class="texto-suave">Ver cómo te fue ›</span>
+    </a>`;
 }
 
 // ---------- Redes (acceso rápido) ----------

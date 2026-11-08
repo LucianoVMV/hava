@@ -16,9 +16,10 @@ Hava es la primera app de una familia de apps personales. Todas tienen la misma 
 | Enfoque | Temporizador Pomodoro, cursos, meta diaria, historial y minutos por curso |
 | Redes | Registro manual de minutos por app, límite diario/semanal, tendencia y comparación con la semana pasada |
 | Sueño | "Me voy a dormir" / "Ya desperté", registro manual, promedio, regularidad, gráfico semanal |
+| Resumen | Semana actual vs. anterior en hábitos, estudio, sueño, agua y redes, con conclusiones accionables |
 | Ajustes | Exportar/importar respaldo `.json`, borrar todos los datos |
 
-Próximamente: Resumen semanal, exportar recordatorios a Calendario (`.ics`).
+Próximamente: exportar recordatorios a Calendario (`.ics`).
 
 📱 **Guía para el iPhone** (límites reales de apps, avisos al abrir Instagram, recordatorio al salir de casa): [docs/atajos-ios.md](docs/atajos-ios.md)
 
