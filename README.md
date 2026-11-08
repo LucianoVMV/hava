@@ -5,6 +5,8 @@
 App personal de hábitos y productividad hecha como **PWA** (app web instalable), pensada primero para iPhone y que también funciona en PC.
 HTML + CSS + JavaScript puro, sin frameworks ni dependencias, y **funciona sin internet** después de la primera carga.
 
+**Abrir la app:** <https://lucianovmv.github.io/hava/>
+
 Hava es la primera app de una familia de apps personales. Todas tienen la misma mascota: **Milo** 🦆, un patito de cabeza verde que cambia de estilo según la app.
 
 | Pantalla | Qué hace |
